@@ -23,12 +23,11 @@ http.createServer(function(req,res){
         });
       }
       else if(q==='/sendMail'&& req.method==='POST'){
-          console.log('data');
           let body='';
          req.on('data', chunk=>{
            body+= chunk.toString();
-           console.log(parse(body));
-         });
+          });
+          console.log(body);
          req.on('end',(body)=>{
            console.log(parse(body));
            res.end('Ok');
