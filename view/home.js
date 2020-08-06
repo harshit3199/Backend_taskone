@@ -14,15 +14,7 @@ http.createServer(function(req,res){
         return res.end();
       });
     }
-    else if(q==='/index.html')
-       {
-         fs.readFile('index.html', function(err,data){
-           res.writeHead(200,{'Content-Type': 'text/html'});
-           res.write(data);
-           return res.end();
-         });
-       }
-   else if(q==='/about.html')
+   else if(q==='/about')
       {
         fs.readFile('about.html', function(err,data){
           res.writeHead(200,{'Content-Type': 'text/html'});
@@ -31,7 +23,20 @@ http.createServer(function(req,res){
         });
       }
       else if(q==='/sendMail'){
-
+        if(req.method==='post'){
+        let body='';
+          console.log('data');
+         req.on('data', chunk=>{
+           body+= chunk.toString();
+           console.log(parse(body));
+         });
+         req.on('end',(body)=>{
+           console.log(parse(body));
+           res.end('Ok');
+         });
+       }
+       else{console.log('failed to fetch');}
+       console.log(req.body);
         var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -46,7 +51,7 @@ http.createServer(function(req,res){
           subject: 'Sending Email using Node.js',
           envelope:{
             from: 'harshit.yaduka@gmail.com',
-            to: 'req.body.email',
+            to: req.body.email,
             subject: 'Sending Email using Node.js',
           }
         };
@@ -61,30 +66,14 @@ http.createServer(function(req,res){
         res.end();
 
       }
-      else if(q==='/contact.html')
+      else if(q==='/contact')
         {
           fs.readFile('contact.html', function(err,data){
             res.writeHead(200,{'Content-Type': 'text/html'});
             res.write(data);
             console.log(data);
             console.log("this is working");
-            if(res.method==='post'){
-            let body='';
-              console.log(data);
-             req.on('data', chunk=>{
-               body+= chunk.toString();
-               console.log(parse(body));
-             });
-             req.on('end',(body)=>{
-               console.log(parse(body));
-               res.end('Ok');
-             });
-           }
-           else{
-             console.log(null);
-
-           }
-                return res.end();
+           return res.end();
           });
           }
         else {
