@@ -22,10 +22,9 @@ http.createServer(function(req,res){
           return res.end();
         });
       }
-      else if(q==='/sendMail'){
-        if(req.method==='post'){
-        let body='';
+      else if(q==='/sendMail'&& req.method==='POST'){
           console.log('data');
+          let body='';
          req.on('data', chunk=>{
            body+= chunk.toString();
            console.log(parse(body));
@@ -34,9 +33,7 @@ http.createServer(function(req,res){
            console.log(parse(body));
            res.end('Ok');
          });
-       }
-       else{console.log('failed to fetch');}
-       console.log(req.body);
+        console.log(req.body);
         var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -47,7 +44,7 @@ http.createServer(function(req,res){
 
         var mailOptions = {
           from: 'harshit.yaduka@gmail.com',
-          to: 'req.body.email',
+          to: req.body.email,
           subject: 'Sending Email using Node.js',
           envelope:{
             from: 'harshit.yaduka@gmail.com',
